@@ -3,144 +3,126 @@
 #include <map>
 #include <unordered_map>
 
-
-class Building {
+class Building
+{
 protected:
-    int koordinateX;
-    int koordinateY;
-    int breite = 1;
-    int laenge = 1;
-    int grundpreis;
-    int materialpreis = 0;
+    int coordinateX;
+    int coordinateY;
+    int width = 1;
+    int length = 1;
+    int area = 0;
+    int power = 0; //Pro Flaecheneinheit
+    int basePrice = 0;
+    int materialPrice = 0;
     char label = '0';
-    int value;
+
+    //Materialien
+    Wood* wood = new Wood();
+    Metal* metal = new Metal();
+    Plastic* plastic = new Plastic();
+    //Map fuer Materialliste
+    std::unordered_map<Material*, int> materialList;
+    //Map da Kapseln in eine externe Klasse uebersichtlichkeit erschwert. Die Materialliste gehoert zum Gebaeude.
 
 
 public:
-    Holz* holz = new Holz();
-    Metall* metall = new Metall();
-    Kunststoff* kunststoff = new Kunststoff();
-    std::unordered_map<Material*, int> materialListe;
-
-
     //Konstruktor
-    Building() {}
+    Building(int coordX, int coordY, int length, int width) {
+        this->coordinateX = coordX;
+        this->coordinateY = coordY;
+        this->length = length;
+        this->width;
+        this->area = (length * width);
+    }
 
     //Kopierkonstruktor
-    Building(const Building& building);
+    Building(Building& build);
 
-    //swap for copy and swap
-    void swap(Building& other);
+    //swap fuer copy and swap
+    void swap(Building& build);
 
     //Zuweisungsoperator
-    Building& operator=(Building building);
+    Building& operator=(Building build);
 
-    //Standartdestruktor
+    //Destruktor
     ~Building() {
-        delete[] holz;
-        delete[] metall;
-        delete[] kunststoff;
+        delete[] wood;
+        delete[] metal;
+        delete[] plastic;
     }
 
-    //Getter
-    int getKoordinateX() {
-        return koordinateX;
-    }
-    int getKoordinateY() {
-        return koordinateY;
-    }
-    int getBreite() {
-        return breite;
-    }
-    int getLaenge() {
-        return laenge;
-    }
-    int getGrundpreis() {
-        return grundpreis;
-    }
-    int getMaterialpreis() {
-        return materialpreis;
-    }
+    //Getter and Setter
+    int getCoordinateX();
+    int getCoordinateY();
 
-    char getLabel() {
-        return label;
-    }
+    int getWidth();
+    int getLength();
+
+    int getArea();
+    void setArea(int area);
+
+    int getPower();
+
+    int getBasePrice();
+    int getMaterialPrice();
+    int getTotalPrice();
+
+
+    char getLabel();
+
+    int getWood();
+    int getMetal();
+    int getPlastic();
+
 };
 
-class Solarkraftwerk : public Building {
-private:
-    //Holz, Metall, Metall, Metall, Kunststoff
+class SolarPowerPlant : public Building {
 public:
 
+    //Konstruktor
+    SolarPowerPlant(int coordX, int coordY, int length, int width) : Building(coordX, coordY, length, width) {
 
-    Solarkraftwerk(int koordinateX, int koordinateY) {
-        this->koordinateX = koordinateX;
-        this->koordinateY = koordinateY;
-        breite = 5;
-        laenge = 3;
-
-        //Initialisiere Materialliste
-        materialListe[holz] = int(1);
-        materialListe[metall] = int(3);
-        materialListe[kunststoff] = int(1);
-
-        //Berechne Materialpreis
-        materialpreis = (materialListe[holz] * holz->getPreis()) + (materialListe[metall] * metall->getPreis()) + (materialListe[kunststoff] * kunststoff->getPreis());
-
-        grundpreis = 500;
+        basePrice = 500;
+        power = 1000; //Pro Flaecheneinheit
         label = 'S';
+
+        //Initialisiere Materialliste
+        materialList[wood] = int(1);
+        materialList[metal] = int(3);
+        materialList[plastic] = int(2);
+
     }
 };
 
-class Windkraftwerk : public Building {
-private:
-    //Holz, Metall, Metall, Kunststoff, Kunststoff, Kunststoff
-
+class WindTurbine : public Building {
 public:
-    static const int materialienSize = 10;
-    Material* materialien[materialienSize] = { holz, metall, metall, kunststoff, kunststoff, kunststoff, nullptr, nullptr,
-                                              nullptr, nullptr };
+    WindTurbine(int coordX, int coordY, int length, int width) : Building(coordX, coordY, length, width) {
 
-    Windkraftwerk(int koordinateX, int koordinateY) {
-        this->koordinateX = koordinateX;
-        this->koordinateY = koordinateY;
-        breite = 2;
-        laenge = 2;
+        basePrice = 1000;
+        power = 2500; //Pro Flaecheneinheit
+        label = 'W';
 
         //Initialisiere Materialliste
-        materialListe[holz] = int(1);
-        materialListe[metall] = int(3);
-        materialListe[kunststoff] = int(1);
+        materialList[wood] = int(1);
+        materialList[metal] = int(2);
+        materialList[plastic] = int(3);
 
-        //Berechne Materialpreis
-        materialpreis = (materialListe[holz] * holz->getPreis()) + (materialListe[metall] * metall->getPreis()) + (materialListe[kunststoff] * kunststoff->getPreis());
     }
 };
 
-class Wasserkraftwerk : public Building {
-private:
-    //Holz, Holz, Holz, Metall, Metall, Metall, Kunststoff, Kunststoff
-    static const int materialienSize = 10;
-    Material* materialien[materialienSize] = { holz, holz, holz, metall, metall, metall, kunststoff, kunststoff,
-                                              nullptr, nullptr };
-
+class HydroelectricPowerPlant : public Building {
 public:
-    Wasserkraftwerk(int koordinateX, int koordinateY) {
-        this->koordinateX = koordinateX;
-        this->koordinateY = koordinateY;
-        breite = 5;
-        laenge = 5;
+    HydroelectricPowerPlant(int coordX, int coordY, int length, int width) : Building(coordX, coordY, length, width) {
 
-        //Initialisiere Materialliste
-        materialListe[holz] = int(1);
-        materialListe[metall] = int(3);
-        materialListe[kunststoff] = int(1);
-
-        //Berechne Materialpreis
-        materialpreis = (materialListe[holz] * holz->getPreis()) + (materialListe[metall] * metall->getPreis()) + (materialListe[kunststoff] * kunststoff->getPreis());
-
-        grundpreis = 2000;
+        basePrice = 2000;
+        power = 5000; //Pro Flaecheneinheit
         label = 'A';
+
+        //Initialisiere Materialliste
+        materialList[wood] = int(3);
+        materialList[metal] = int(3);
+        materialList[plastic] = int(2);
+
     }
 };
 

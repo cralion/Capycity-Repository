@@ -6,50 +6,80 @@ using std::endl;
 using std::cin;
 using std::string;
 
-
-class Material {
-    //Attribute
+class Material
+{
 protected:
-    int preis;
+
+	int price = 0;
+
 public:
-    //Standardkonstruktor
-    Material() {};
 
-    //Kopierkostruktor
-    Material(const Material& _material);
+	//Konstruktor
+	Material() {
+		price = 0;
+	}
 
-    //swap for copy and swap
-    void swap(Material& other);
+	//Kopierkonstruktor
+	Material(const Material& mat);
 
-    //Zuweisungsoperator
-    Material& operator=(Material _material);
+	//swap fuer copy and swap
+	void swap(Material& other);
 
-    //Standarddestruktor
-    ~Material() {};
+	//Zuweisungsoperator
+	Material& operator=(Material mat);
 
-    //getter
-    int getPreis() {
-        return preis;
-    }
+	//Destruktor
+	~Material() {}
 };
 
-class Holz : public Material {
+class Wood : public Material {
 public:
-    Holz() {
-        preis = 100;
-    }
+
+	//Konstruktor
+	Wood() {
+		price = 100;
+	}
+
+	//Getter
+	int getPrice() {
+		return price;
+	}
+
+	//Destruktor
+	~Wood() {}
 };
 
-class Metall : public Material {
+class Metal : public Material {
 public:
-    Metall() {
-        preis = 200;
-    }
+
+	//Konstruktor
+	Metal() {
+		price = 200;
+	}
+
+	//Getter
+	int getPrice() {
+		return price;
+	}
+
+	//Destruktor
+	~Metal() {}
 };
 
-class Kunststoff : public Material {
+class Plastic : public Material {
 public:
-    Kunststoff() {
-        preis = 300;
-    }
+
+	//Konstruktor
+	Plastic() {
+		price = 300;
+	}
+
+	//Getter
+	int getPrice() {
+		return price;
+	}
+
+	//Destruktor
+	~Plastic() {}
 };
+
