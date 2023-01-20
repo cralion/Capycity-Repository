@@ -3,6 +3,8 @@
 #include "Building.h"
 #include <vector>
 
+
+
 class CapycitySim {
 
 public:
@@ -48,4 +50,3 @@ public:
         delete[] bauplan;
     }
 };
-

@@ -1,5 +1,7 @@
 #pragma once
 #include "Material.h"
+#include <map>
+#include <unordered_map>
 
 
 class Building {
@@ -11,16 +13,19 @@ protected:
     int grundpreis;
     int materialpreis = 0;
     char label = '0';
+    int value;
+
 
 public:
     Holz* holz = new Holz();
     Metall* metall = new Metall();
     Kunststoff* kunststoff = new Kunststoff();
+    std::unordered_map<Material*, int> materialListe;
+
 
     //Konstruktor
-    Building() {
+    Building() {}
 
-    }
     //Kopierkonstruktor
     Building(const Building& building);
 
@@ -67,21 +72,21 @@ private:
     //Holz, Metall, Metall, Metall, Kunststoff
 public:
 
-    static const int materialienSize = 10;
-    Material* materialien[materialienSize] = { holz, metall, metall, kunststoff, nullptr, nullptr, nullptr, nullptr,
-                                              nullptr, nullptr };
 
     Solarkraftwerk(int koordinateX, int koordinateY) {
         this->koordinateX = koordinateX;
         this->koordinateY = koordinateY;
         breite = 5;
         laenge = 3;
+
+        //Initialisiere Materialliste
+        materialListe[holz] = int(1);
+        materialListe[metall] = int(3);
+        materialListe[kunststoff] = int(1);
+
         //Berechne Materialpreis
-        for (int i = 0; i < materialienSize; i++) {
-            if (materialien[i] != nullptr) {
-                materialpreis += materialien[i]->getPreis();
-            }
-        }
+        materialpreis = (materialListe[holz] * holz->getPreis()) + (materialListe[metall] * metall->getPreis()) + (materialListe[kunststoff] * kunststoff->getPreis());
+
         grundpreis = 500;
         label = 'S';
     }
@@ -101,14 +106,14 @@ public:
         this->koordinateY = koordinateY;
         breite = 2;
         laenge = 2;
+
+        //Initialisiere Materialliste
+        materialListe[holz] = int(1);
+        materialListe[metall] = int(3);
+        materialListe[kunststoff] = int(1);
+
         //Berechne Materialpreis
-        for (int i = 0; i < materialienSize; i++) {
-            if (materialien[i] != nullptr) {
-                materialpreis += materialien[i]->getPreis();
-            }
-        }
-        grundpreis = 1000;
-        label = 'W';
+        materialpreis = (materialListe[holz] * holz->getPreis()) + (materialListe[metall] * metall->getPreis()) + (materialListe[kunststoff] * kunststoff->getPreis());
     }
 };
 
@@ -125,12 +130,15 @@ public:
         this->koordinateY = koordinateY;
         breite = 5;
         laenge = 5;
+
+        //Initialisiere Materialliste
+        materialListe[holz] = int(1);
+        materialListe[metall] = int(3);
+        materialListe[kunststoff] = int(1);
+
         //Berechne Materialpreis
-        for (int i = 0; i < materialienSize; i++) {
-            if (materialien[i] != nullptr) {
-                materialpreis += materialien[i]->getPreis();
-            }
-        }
+        materialpreis = (materialListe[holz] * holz->getPreis()) + (materialListe[metall] * metall->getPreis()) + (materialListe[kunststoff] * kunststoff->getPreis());
+
         grundpreis = 2000;
         label = 'A';
     }
